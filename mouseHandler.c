@@ -3,7 +3,6 @@
 void onInput(t_context *sys)
 {
 	static int isLeftClicked = 0;
-	static int isRightClicked = 0;
 	// These two are the coords of the point when the user touched the screen
 	static int originalPosX = 0;
 	static int originalPosY = 0;
@@ -13,9 +12,7 @@ void onInput(t_context *sys)
 	if (!sys->isPressed)
 	{
 		isLeftClicked = 0;
-		isRightClicked = 0;
 		mouseUnclick(sys, Button1);
-		mouseUnclick(sys, Button2);
 	}
 
 	// On enter
@@ -30,20 +27,10 @@ void onInput(t_context *sys)
 	if (distance(Vector2(originalPosX, originalPosY), sys->mouse) <=
 			CLICK_PRECISION) 
 	{
-
-		if (timeSinceLastChange > RIGHT_CLICK_TIME)
-		{
-			if (!isRightClicked) {
-				mouseUnclick(sys, Button1);
-				mouseClick(sys, Button3); // Right click
-			}
-
-			isRightClicked = 1;
-		}
-		else if (timeSinceLastChange > LEFT_CLICK_TIME)
+		if (timeSinceLastChange > LEFT_CLICK_TIME)
 		{
 			if (!isLeftClicked) {
-				mouseClick(sys, Button3); // Left click
+				mouseClick(sys, Button1); // Left click
 			}
 
 			isLeftClicked = 1;
@@ -59,7 +46,7 @@ void onInput(t_context *sys)
 	}
 
 	// Position refresh
-	if (sys->isPressed && distance(sys->lastMouse, sys->mouse) >=
+	if (sys->isPressed && sys->wasPressed && distance(sys->lastMouse, sys->mouse) >=
 			MOVE_PRECISION)
 		mouseMove(sys, sys->mouse);
 }

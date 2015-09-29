@@ -37,9 +37,42 @@ int main(int ac, char **av)
 		sleep(10);
 	}
 
-	printf("Screen file opened\n");
+	calibrate(&sys, "./.calibration");
 
 	listenInput(&sys, touchFile, &onInput);
+}
+
+void calibrate(t_context *sys , const char * file)
+{
+	int fd;
+	int i;
+	int *fields[4] =
+		{&(sys->calibration_Min.X),
+		 &(sys->calibration_Min.Y),
+		 &(sys->calibration_Max.X),
+		 &(sys->calibration_Max.Y)};
+	char *tmp;
+	size_t bytes = 128;
+	FILE *stream;
+
+	if ((fd = open(file, O_RDONLY)) < 0 ||
+		!(tmp = malloc(128)) ||
+		!(stream = fdopen(fd, "r")))
+	{
+		sys->calibration_Min = Vector2(0, 0);
+		sys->calibration_Max = Vector2(T_RES, T_RES);
+	}
+	else
+	{
+		for (i = 0; i < 4; i++)
+		{
+			if ((getline(&tmp, &bytes, stream)));
+			*(fields[i]) = atoi(tmp);
+		}
+		fclose(stream);
+		close(fd);
+		free(tmp);
+	}
 }
 
 // Listen for the touch screen
@@ -57,15 +90,14 @@ void listenInput(t_context *sys, int touchFile,
 			int i;
 			for (i = 0; i < sizeof(input); i++)
 			{
-				printf("%hhx%c%c", ((char *)(&input))[i],
+				fprintf(stderr, "%hhx%c%c", ((char *)(&input))[i],
 				                   (i && i % 2 == 0) ? ' ' : '\0',
 				                   (i && i % 16 == 0) ? '\n' : '\0');
 			}
 		}
 		else 
 		{
-			sys->mouse.X = posInScreen(&(input.pointX), sys->screen.X, T_RES);
-			sys->mouse.Y = posInScreen(&(input.pointY), sys->screen.Y, T_RES);
+			sys->mouse = posInScreen(sys, &input);
 			sys->isPressed = input.point.field2;
 
 			callback(sys);

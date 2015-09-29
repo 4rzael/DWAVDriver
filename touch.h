@@ -38,6 +38,7 @@
 # include <string.h>
 # include <math.h>
 # include <stdlib.h>
+# include <limits.h>
 
 # include <X11/Xlib.h>
 # include <X11/Xlib.h>
@@ -45,10 +46,10 @@
 
 # define T_RES (0x0F * 0xFF)
 
-# define MOVE_PRECISION 5
+# define MOVE_PRECISION 2
 # define CLICK_PRECISION 30
 # define RIGHT_CLICK_TIME 50
-# define LEFT_CLICK_TIME 5
+# define LEFT_CLICK_TIME 3
 
 struct s_touchLine 
 {
@@ -89,16 +90,19 @@ typedef struct s_context
 	Window root;
 	Display *display;
 	XEvent event;
+	// Calibration
+	t_vec2 calibration_Min;
+	t_vec2 calibration_Max;
 } t_context;
 
 
-
 // utils.c
-inline int posInScreen(t_touchLine *, int, int);
 inline int distance(t_vec2, t_vec2);
+t_vec2 posInScreen(t_context *, t_touchInput *);
 
-// main.c
+// touch.c
 void listenInput(t_context *, int, void (*)(t_context *));
+void calibrate(t_context *, const char *);
 
 // input.c
 int checkInput(const t_touchInput * const);

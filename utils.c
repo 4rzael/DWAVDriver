@@ -1,8 +1,25 @@
 #include "touch.h"
 
-inline int posInScreen(t_touchLine *line, int screenSize, int touchRes)
+int calibrated(int min, int max, int number)
 {
-	return (line->field1 * 255 + line->field2) * screenSize / touchRes;
+	return (number - min) * (float)((float)(max - min) / (float)(T_RES));
+}
+
+t_vec2 posInScreen(t_context *sys, t_touchInput *input)
+{
+	return Vector2(
+		calibrated(
+			sys->calibration_Min.X,
+			sys->calibration_Max.X,
+			input->pointX.field1 * 255 + input->pointX.field2)
+		* sys->screen.X / T_RES,
+		
+		calibrated(
+			sys->calibration_Min.Y,
+			sys->calibration_Max.Y,
+			input->pointY.field1 * 255 + input->pointY.field2)
+		* sys->screen.Y / T_RES		
+		);
 }
 
 inline int distance(t_vec2 p1, t_vec2 p2)
