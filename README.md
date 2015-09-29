@@ -27,6 +27,8 @@ By user-side, I mean that you don't need to modify/patch/recompile your kernel. 
 
 * reboot.
 
+ * Auto startup of the driver only works on distros using systemctl (test on Archlinux), feel free to change the install.sh
+
 * Enjoy.
 
 
