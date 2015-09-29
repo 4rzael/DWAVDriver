@@ -27,5 +27,8 @@ echo "StandardOutput=syslog" >> /usr/lib/systemd/system/DWAVDriver.service && \
 echo "StandardError=syslog" >> /usr/lib/systemd/system/DWAVDriver.service && \
 echo "SyslogIdentifier=DWAVDriver" >> /usr/lib/systemd/system/DWAVDriver.service && \
 echo "User=root" >> /usr/lib/systemd/system/DWAVDriver.service && \
+echo "" >> /usr/lib/systemd/system/DWAVDriver.service && \
+echo "[Install]" >> /usr/lib/systemd/system/DWAVDriver.service && \
+echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/DWAVDriver.service && \
 systemctl enable DWAVDriver.service && \
 echo "success"
