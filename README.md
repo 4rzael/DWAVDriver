@@ -1,4 +1,4 @@
-# touchDriver
+# DWAVDriver
 A user-side driver for a "D-WAV Scientific Co., Ltd" screen.
 
 By user-side, I mean that you don't need to modify/patch/recompile your kernel. It's just a little software that read in the HID file and simulate a mouse with X11.
