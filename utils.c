@@ -2,7 +2,7 @@
 
 int calibrated(int min, int max, int number)
 {
-	return (number - min) * (float)((float)(max - min) / (float)(T_RES));
+	return (number - min) * (float)((float)(T_RES) / (float)(max - min));
 }
 
 t_vec2 posInScreen(t_context *sys, t_touchInput *input)
