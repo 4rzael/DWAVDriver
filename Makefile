@@ -1,6 +1,6 @@
-NAME_CORE = touchDriver
+NAME_CORE = DWAVDriver
 
-NAME_CALIBRATION = calibrate
+NAME_CALIBRATION = calibrateDWAV
 
 MAIN_CORE = touch.c
 
